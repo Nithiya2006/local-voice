@@ -2,15 +2,16 @@
 // Structured to easily map to a MongoDB/Express Issue Schema in future backend expansion
 
 export const CATEGORIES = [
-  { id: "all", name: "All Issues", icon: "🌐" },
-  { id: "Pothole", name: "Potholes", icon: "🕳️", description: "Deep road craters and asphalt collapse" },
-  { id: "Streetlight", name: "Streetlights", icon: "💡", description: "Dark roads, flickering or broken lamps" },
-  { id: "Garbage", name: "Garbage", icon: "🗑️", description: "Overflowing dumpsters and uncollected waste" },
-  { id: "Water Leakage", name: "Water Leakage", icon: "🚰", description: "Burst civic pipelines and flooding valves" },
-  { id: "Road Damage", name: "Road Damage", icon: "🛣️", description: "Cracked pavement, sinkholes and eroded tarmac" },
-  { id: "Traffic Signal", name: "Traffic Signals", icon: "🚦", description: "Malfunctioning lights and blind intersections" },
-  { id: "Fallen Tree", name: "Fallen Trees", icon: "🌳", description: "Blocked lanes, broken branches and hazard trunks" },
-  { id: "Infrastructure", name: "Infrastructure", icon: "🚧", description: "Broken guardrails, missing manholes, collapsed signs" }
+  { id: "all", name: "All Issues", label: "All Issues", icon: "🌐" },
+  { id: "Pothole", name: "Pothole", label: "Potholes", icon: "🕳️", description: "Deep road craters and asphalt collapse" },
+  { id: "Streetlight", name: "Streetlight", label: "Streetlights", icon: "💡", description: "Dark roads, flickering or broken lamps" },
+  { id: "Garbage", name: "Garbage", label: "Garbage", icon: "🗑️", description: "Overflowing dumpsters and uncollected waste" },
+  { id: "Water Leakage", name: "Water Leakage", label: "Water Leakage", icon: "🚰", description: "Burst civic pipelines and flooding valves" },
+  { id: "Road Damage", name: "Road Damage", label: "Road Damage", icon: "🛣️", description: "Cracked pavement, sinkholes and eroded tarmac" },
+  { id: "Traffic Signal", name: "Traffic Signal", label: "Traffic Signals", icon: "🚦", description: "Malfunctioning lights and blind intersections" },
+  { id: "Fallen Tree", name: "Fallen Tree", label: "Fallen Trees", icon: "🌳", description: "Blocked lanes, broken branches and hazard trunks" },
+  { id: "Infrastructure", name: "Infrastructure", label: "Infrastructure", icon: "🚧", description: "Broken guardrails, missing manholes, collapsed signs" },
+  { id: "Other", name: "Other", label: "Other Issues", icon: "📌", description: "General community maintenance and other local hazards" }
 ];
 
 export const STATUS_STEPS = ["Reported", "Verified", "Assigned", "In Progress", "Resolved"];

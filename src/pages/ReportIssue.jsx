@@ -151,29 +151,34 @@ const ReportIssue = () => {
     const errs = {};
     if (!title.trim()) {
       errs.title = "Please provide an issue title.";
-    } else if (title.trim().length < 5) {
-      errs.title = "Title should be at least 5 characters.";
+    } else if (title.trim().length < 3) {
+      errs.title = "Title should be at least 3 characters.";
     }
     if (!description.trim()) {
       errs.description = "Please describe the problem details.";
-    } else if (description.trim().length < 10) {
-      errs.description = "Description should be at least 10 characters.";
+    } else if (description.trim().length < 5) {
+      errs.description = "Description should be at least 5 characters.";
     }
     if (!category) {
       errs.category = "Please select a category.";
-    }
-    if (!imagePreview && !selectedFile) {
-      errs.image = "Please attach a photo of the problem (JPG, PNG, or WebP up to 5MB).";
     }
     return errs;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({});
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      window.scrollTo({ top: 150, behavior: "smooth" });
+      const firstErrorKey = Object.keys(validationErrors)[0];
+      const element = document.getElementById(`issue-${firstErrorKey}`) || document.getElementById("landmark-address");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+        element.focus();
+      } else {
+        window.scrollTo({ top: 150, behavior: "smooth" });
+      }
       return;
     }
 
@@ -188,17 +193,17 @@ const ReportIssue = () => {
         latitude: customLocation.latitude,
         longitude: customLocation.longitude,
         imageFile: selectedFile,
-        image: imagePreview
+        image: imagePreview || ""
       });
 
       setIsSubmitting(false);
 
-      if (res.success) {
+      if (res && res.success) {
         setShowSuccessModal(true);
       } else {
         setErrors((prev) => ({
           ...prev,
-          general: res.message || "Failed to submit report. Please check server connection."
+          general: res?.message || "Failed to submit report. Please verify your connection or login session."
         }));
       }
     } catch (err) {
@@ -223,6 +228,26 @@ const ReportIssue = () => {
           Submit photos and location details of damaged infrastructure to notify neighbors and municipal repair teams.
         </p>
       </div>
+
+      {errors.general && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.75rem",
+            padding: "1rem 1.25rem",
+            backgroundColor: "#fee2e2",
+            border: "1px solid #f87171",
+            borderRadius: "var(--radius-md)",
+            color: "#991b1b",
+            marginBottom: "1.5rem",
+            fontSize: "0.925rem"
+          }}
+        >
+          <AlertCircle size={20} style={{ flexShrink: 0 }} />
+          <span>{errors.general}</span>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
         {/* Step 1: Category */}
@@ -257,7 +282,7 @@ const ReportIssue = () => {
                   }}
                 >
                   <span style={{ fontSize: "1.75rem" }}>{cat.icon}</span>
-                  <span style={{ fontSize: "0.8125rem", fontWeight: 700 }}>{cat.name}</span>
+                  <span style={{ fontSize: "0.8125rem", fontWeight: 700 }}>{cat.label || cat.name}</span>
                 </button>
               );
             })}
@@ -498,6 +523,26 @@ const ReportIssue = () => {
         </div>
 
         {/* Step 6: Submit */}
+        {errors.general && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "1rem 1.25rem",
+              backgroundColor: "#fee2e2",
+              border: "1px solid #f87171",
+              borderRadius: "var(--radius-md)",
+              color: "#991b1b",
+              marginBottom: "1rem",
+              fontSize: "0.925rem"
+            }}
+          >
+            <AlertCircle size={20} style={{ flexShrink: 0 }} />
+            <span>{errors.general}</span>
+          </div>
+        )}
+
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}>
           <Button
             type="button"

@@ -3,10 +3,10 @@ import Support from "../models/Support.js";
 import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 
-// Helper to format uploaded image URL
+// Helper to format uploaded image URL (with HTTPS and reverse proxy support)
 const getImageUrl = (req) => {
   if (req.file) {
-    const protocol = req.protocol || "http";
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol || "http";
     const host = req.get("host") || "localhost:5000";
     return `${protocol}://${host}/uploads/${req.file.filename}`;
   }

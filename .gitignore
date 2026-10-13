@@ -7,13 +7,24 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Production build output
+dist/
+dist-ssr/
+
+# Environment configurations
 .env
 .env.*
+!.env.example
 server/.env
+server/.env.*
+!server/.env.example
+
+# Uploaded incident media (stored locally during dev)
+uploads/*
 server/uploads/*
 !server/uploads/.gitkeep
 

@@ -8,7 +8,8 @@ const CATEGORY_ICONS = {
   "Road Damage": "🛣️",
   "Traffic Signal": "🚦",
   "Fallen Tree": "🌳",
-  Infrastructure: "🚧"
+  Infrastructure: "🚧",
+  Other: "📌"
 };
 
 /**

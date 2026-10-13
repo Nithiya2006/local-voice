@@ -25,22 +25,41 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB
 connectDB();
 
+// Trust reverse proxy (Render, Vercel, Heroku) for HTTPS header propagation
+app.set("trust proxy", 1);
+
 // CORS Configuration
 const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "http://localhost:3000",
-  process.env.CLIENT_URL
-].filter(Boolean);
+  "http://localhost:3000"
+];
+
+if (process.env.CLIENT_URL) {
+  process.env.CLIENT_URL.split(",").forEach((url) => {
+    const trimmed = url.trim().replace(/\/$/, "");
+    if (trimmed && !allowedOrigins.includes(trimmed)) {
+      allowedOrigins.push(trimmed);
+    }
+  });
+}
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps, curl, postman)
-      if (!origin || allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes("*")) {
+      // Allow server-to-server, mobile apps, or curl with no origin
+      if (!origin) return callback(null, true);
+
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      const isAllowed =
+        allowedOrigins.includes("*") ||
+        allowedOrigins.includes(normalizedOrigin) ||
+        (process.env.NODE_ENV !== "production");
+
+      if (isAllowed) {
         callback(null, true);
       } else {
-        callback(null, true); // Allow during local development
+        callback(null, true); // Fallback to allow client requests without breaking
       }
     },
     credentials: true,
@@ -56,13 +75,26 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // Static Assets: Serve Uploaded Files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Health Check / Root Endpoint
+// Root Endpoint & Health Check
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "LocalVoice API is running",
+    endpoints: {
+      health: "/api/health",
+      auth: "/api/auth",
+      issues: "/api/issues",
+      support: "/api/support",
+      notifications: "/api/notifications",
+      dashboard: "/api/dashboard"
+    }
+  });
+});
+
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
-    status: "ok",
-    timestamp: new Date().toISOString(),
-    service: "LocalVoice Civic API Server"
+    message: "LocalVoice API is running"
   });
 });
 

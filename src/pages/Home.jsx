@@ -349,7 +349,7 @@ const Home = () => {
                   <span className="category-icon">{cat.icon}</span>
                   <span className="category-count">{count} {count === 1 ? "report" : "reports"}</span>
                 </div>
-                <h3 className="category-name">{cat.name}</h3>
+                <h3 className="category-name">{cat.label || cat.name}</h3>
                 <p className="category-desc">{cat.description}</p>
               </Link>
             );

@@ -113,10 +113,10 @@ export const createIssue = async (issueData) => {
   let response;
 
   if (issueData instanceof FormData) {
-    // Multipart form-data with binary image upload
+    // Multipart form-data with binary image upload: delete explicit JSON content-type header
     response = await api.post("/issues", issueData, {
       headers: {
-        "Content-Type": "multipart/form-data"
+        "Content-Type": undefined
       }
     });
   } else {
